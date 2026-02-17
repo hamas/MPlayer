@@ -1,0 +1,12 @@
+# Ignore native folders from GitHub language stats
+android/** linguist-vendored
+ios/** linguist-vendored
+windows/** linguist-vendored
+linux/** linguist-vendored
+macos/** linguist-vendored
+web/** linguist-vendored
+
+# Ignore build artifacts and generated files
+build/** linguist-vendored
+*.g.dart linguist-generated
+*.freezed.dart linguist-generated
