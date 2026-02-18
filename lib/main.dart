@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mplayer/features/audio/logic/audio_providers.dart';
+import 'package:mplayer/features/audio/logic/mplayer_audio_handler.dart';
+import 'package:mplayer/features/audio/models/song.dart';
 
 void main() {
   runApp(const ProviderScope(child: MPlayerApp()));
@@ -74,13 +76,21 @@ class LibraryScreen extends ConsumerWidget {
                 title: Text(song.title, maxLines: 1),
                 subtitle: Text(song.artist, maxLines: 1),
                 trailing: Text(_formatDuration(song.duration)),
-                onTap: () {
-                  // TODO: Play song
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Playing ${song.title} (Simulated)'),
-                    ),
+                onTap: () async {
+                  final audioHandler = await ref.read(
+                    audioHandlerProvider.future,
                   );
+                  final mediaItems = songs.map((s) => s.toMediaItem()).toList();
+
+                  // Cast to MPlayerAudioHandler to access custom method
+                  if (audioHandler is MPlayerAudioHandler) {
+                    await audioHandler.playFromQueue(mediaItems, index);
+                  } else {
+                    // Fallback if we strictly use AudioHandler interface (though we know the concrete type here)
+                    await audioHandler.updateQueue(mediaItems);
+                    await audioHandler.skipToQueueItem(index);
+                    await audioHandler.play();
+                  }
                 },
               );
             },

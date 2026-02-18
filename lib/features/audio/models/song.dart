@@ -1,10 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:audio_service/audio_service.dart';
 
 part 'song.freezed.dart';
 part 'song.g.dart';
 
 @freezed
-class Song with _$Song {
+abstract class Song with _$Song {
   const factory Song({
     required String id,
     required String title,
@@ -20,4 +21,18 @@ class Song with _$Song {
   }) = _Song;
 
   factory Song.fromJson(Map<String, dynamic> json) => _$SongFromJson(json);
+}
+
+extension SongExtension on Song {
+  MediaItem toMediaItem() {
+    return MediaItem(
+      id: uri, // Use URI as ID for now as that's what we use for AudioSource
+      title: title,
+      artist: artist,
+      album: album,
+      duration: Duration(milliseconds: duration),
+      artUri: artworkUri != null ? Uri.parse(artworkUri!) : null,
+      extras: {'dbId': id},
+    );
+  }
 }
