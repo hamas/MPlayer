@@ -12,7 +12,6 @@ analyzer:
 linter:
   rules:
     - always_declare_return_types
-    - always_require_non_null_named_parameters
     - annotate_overrides
     - avoid_print
     - avoid_unnecessary_containers
