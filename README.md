@@ -6,32 +6,40 @@ MPlayer is a cutting-edge, open-source music player developed in 100% **Dart** u
 
 ## 🚀 Features
 
-### 🎧 Audio Experience
--   **Local Playback**: Seamlessly scans and plays audio files from device storage.
+### 🎧 Pro Audio Experience
+-   **10-Band Equalizer & Effects**: Built-in native Android EQ with Bass Boost and genre presets.
+-   **Gapless & Crossfade**: Smooth audio transitions configurable up to 10 seconds.
+-   **Local Playback**: Seamlessly scans and plays audio files with Isolate-backed lightning-fast indexing.
 -   **Background Playback**: Robust service continues music when the app is minimized or the screen is off.
--   **Gapless Playback**: uninterrupted listening experience (Planned).
--   **Waveform Visualizer**: Real-time audio visualization on the Now Playing screen.
--   **Lyrics**: Synchronized lyrics support.
+-   **Waveform Visualizer**: Real-time interactive wavy slider `WavyMusicSlider` on the Now Playing screen.
+
+### ☁️ YouTube Music Integration ($0 Cost API-Keyless)
+-   **Hybrid InnerTube Engine**: Browse and search YouTube's global catalog without needing a developer API key.
+-   **Secure Authentication**: Log in to access your "Liked Songs" directly via an expressive M3 WebView.
+-   **Offline Downloads**: Download directly from YouTube stream `.m4a` sources and instantly add them to your local library.
 
 ### 🎨 Material 3 Expressive UI
--   **Motion-Rich**: Fluid animations, shared element transitions, and unparalleled responsiveness.
--   **Dynamic Theming**: automatically adapts the app's color scheme to match your device's wallpaper/system theme.
--   **Expressive Layouts**: Big, bold typography and easy-to-reach controls.
+-   **Motion-Rich**: Fluid `flutter_animate` bouncy physics, shared element transitions, and extreme responsiveness.
+-   **Dynamic Theming**: Automatically adapts the app's color scheme to match the currently playing Album Art using `palette_generator`.
+-   **Expressive Layouts**: Big, bold typography and easy-to-reach UI controls.
 
-### 🧠 Smart Features
+### 🧠 Smart Features & Tools
 -   **AI Playlists (Gemini)**: Ask for "somber music for a rainy night" and get a generated playlist instantly.
--   **Local Casting**: Built-in HTTP server allows you to cast your local files to web browsers or Chromecast devices on the same network.
+-   **Batch Tag Editor**: Natively overwrite raw MP3/FLAC/M4A ID3 metadata blocks directly on your local storage.
+-   **Folder Exclusion**: Safely hide private audio directories like WhatsApp Voice Notes from the library scanner.
+-   **Android Auto**: Fully compatible with car displays and home widgets.
 
 ## 🛠 Tech Stack
 
-MPlayer is built with the latest and most robust Dart technologies:
+MPlayer is built with the absolute latest and most robust Dart technologies:
 
 *   **Language**: Dart 3.x (100% pure Dart codebase)
 *   **Framework**: Flutter
-*   **Architecture**: Riverpod (State Management) + Repository Pattern
-*   **Database**: `drift` (Type-safe SQLite)
-*   **Networking**: `retrofit` + `dio`
-*   **Audio Engine**: `just_audio` + `audio_service`
+*   **Architecture**: Riverpod 3.x (State Management) + Feature-First (Screaming) Architecture
+*   **Database**: `drift` (Type-safe SQLite with Background Isolates)
+*   **Networking**: `dio` + `youtube_explode_dart` + `lrclib`
+*   **Audio Engine**: `just_audio` + `audio_service` + `audio_metadata_reader`
+*   **Security**: `flutter_secure_storage`
 *   **AI**: `google_generative_ai` (Gemini SDK)
 
 ## 📥 Installation
@@ -65,12 +73,15 @@ MPlayer is built with the latest and most robust Dart technologies:
     flutter run
     ```
 
-## 🗺️ Roadmap
+## 🗺️ Roadmap (100% Completed)
 
-- [x] **Phase 1: Foundation**: Database Setup, File Scanning Logic (In Progress).
-- [ ] **Phase 2: Audio Engine**: Background Service, Notification Controls.
-- [ ] **Phase 3: UI Design**: Material 3 Expressive Implementation.
-- [ ] **Phase 4: Advanced**: AI, Casting, Tag Editing.
+- [x] **Phase 1: Foundation**: Isolate-backed Drift Database, Pure Dart Scanner.
+- [x] **Phase 2: Networking & Parity**: Synchronized Lyrics, Deep Folder Trees, Custom Waveform Sliders.
+- [x] **Phase 3: Pro Audio**: 10-Band EQ, Bass Boost, Gapless & Crossfade, Native Batch Tag Editor.
+- [x] **Phase 4: Ecosystem**: Android Auto integration, Home Screen Widgets, Gemini AI.
+- [x] **Phase 5: Polish**: Dynamic Album Art Theming, Spring Animations, Storage Exclusion rules.
+- [x] **Phase 6: YouTube Music**: Hybrid API-Keyless Architecture, Cookies Extraction, Offline Track Downloading.
+- [x] **Phase 7: Optimization**: 100% Codebase Standardization, Outdated Package Elimination, Strict Security Audits.
 
 ## 🤝 Contributing
 
