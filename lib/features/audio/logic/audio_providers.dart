@@ -1,9 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:mplayer/core/database/app_database.dart';
 import 'package:mplayer/features/audio/logic/song_repository.dart';
-import 'package:mplayer/features/audio/models/song.dart' as model;
-import 'package:audio_service/audio_service.dart';
+import 'package:mplayer/features/audio/models/song.dart';
 import 'package:mplayer/features/audio/logic/mplayer_audio_handler.dart';
 
 part 'audio_providers.g.dart';
@@ -20,11 +18,16 @@ SongRepository songRepository(Ref ref) {
 }
 
 @riverpod
-Stream<List<model.Song>> allSongs(Ref ref) {
+Stream<List<Song>> allSongs(Ref ref) {
   return ref.watch(songRepositoryProvider).watchAllSongs();
 }
 
+@riverpod
+Stream<List<Song>> recentSongs(Ref ref) {
+  return ref.watch(songRepositoryProvider).watchRecentSongs();
+}
+
 @Riverpod(keepAlive: true)
-Future<AudioHandler> audioHandler(Ref ref) async {
+Future<MPlayerAudioHandler> audioHandler(Ref ref) async {
   return await initAudioService();
 }

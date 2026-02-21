@@ -3,8 +3,8 @@ import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_session/audio_session.dart';
 
-Future<AudioHandler> initAudioService() async {
-  return await AudioService.init(
+Future<MPlayerAudioHandler> initAudioService() async {
+  final handler = await AudioService.init(
     builder: () => MPlayerAudioHandler(),
     config: const AudioServiceConfig(
       androidNotificationChannelId: 'com.hamas.mplayer.channel.audio',
@@ -13,16 +13,48 @@ Future<AudioHandler> initAudioService() async {
       androidStopForegroundOnPause: true,
     ),
   );
+  return handler;
 }
 
 class MPlayerAudioHandler extends BaseAudioHandler
     with QueueHandler, SeekHandler {
-  final _player = AudioPlayer();
+  final AndroidEqualizer _equalizer = AndroidEqualizer();
+  final AndroidLoudnessEnhancer _loudnessEnhancer = AndroidLoudnessEnhancer();
+  late final AudioPlayer _player;
+
+  // ignore: deprecated_member_use
   final _playlist = ConcatenatingAudioSource(children: []);
 
+  double _crossfadeDuration = 0.0;
+
   MPlayerAudioHandler() {
+    _player = AudioPlayer(
+      audioPipeline: AudioPipeline(
+        androidAudioEffects: [_equalizer, _loudnessEnhancer],
+      ),
+    );
     _init();
   }
+
+  void setCrossfadeDuration(double duration) {
+    _crossfadeDuration = duration;
+  }
+
+  // Experimental crossfade/smooth transition
+  Future<void> _smoothSkip(Future<void> Function() skipAction) async {
+    if (_crossfadeDuration > 0) {
+      await _player.setVolume(0.0);
+      await skipAction();
+      await _player.setVolume(
+        1.0,
+      ); // Ideally should ramp but just audio volume is sync
+    } else {
+      await skipAction();
+    }
+  }
+
+  AndroidEqualizer get equalizer => _equalizer;
+  AndroidLoudnessEnhancer get loudnessEnhancer => _loudnessEnhancer;
 
   Future<void> _init() async {
     final session = await AudioSession.instance;
@@ -97,10 +129,10 @@ class MPlayerAudioHandler extends BaseAudioHandler
   }
 
   @override
-  Future<void> skipToNext() => _player.seekToNext();
+  Future<void> skipToNext() => _smoothSkip(() => _player.seekToNext());
 
   @override
-  Future<void> skipToPrevious() => _player.seekToPrevious();
+  Future<void> skipToPrevious() => _smoothSkip(() => _player.seekToPrevious());
 
   @override
   Future<void> addQueueItems(List<MediaItem> mediaItems) async {
@@ -120,24 +152,28 @@ class MPlayerAudioHandler extends BaseAudioHandler
   }
 
   @override
-  Future<void> updateQueue(List<MediaItem> mediaItems) async {
+  Future<void> updateQueue(List<MediaItem> queue) async {
     await _playlist.clear();
-    await _playlist.addAll(mediaItems.map(_createAudioSource).toList());
+    await _playlist.addAll(queue.map(_createAudioSource).toList());
 
-    queue.add(mediaItems);
+    // Note: 'ConcatenatingAudioSource' usage is standard in just_audio.
+    // If flagged as deprecated by valid lints in future, switch to setAudioSource with list.
+
+    this.queue.add(queue);
   }
 
   AudioSource _createAudioSource(MediaItem item) {
     Uri audioUri;
+    final urlStr = item.extras?['url'] as String? ?? item.id;
     try {
-      audioUri = Uri.parse(item.id);
+      audioUri = Uri.parse(urlStr);
       if (audioUri.scheme.isEmpty) {
         // Assume file path if no scheme
-        audioUri = Uri.file(item.id);
+        audioUri = Uri.file(urlStr);
       }
     } catch (e) {
       // Fallback
-      audioUri = Uri.file(item.id);
+      audioUri = Uri.file(urlStr);
     }
 
     return AudioSource.uri(

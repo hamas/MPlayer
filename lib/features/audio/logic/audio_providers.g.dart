@@ -97,11 +97,11 @@ final allSongsProvider = AllSongsProvider._();
 final class AllSongsProvider
     extends
         $FunctionalProvider<
-          AsyncValue<List<model.Song>>,
-          List<model.Song>,
-          Stream<List<model.Song>>
+          AsyncValue<List<Song>>,
+          List<Song>,
+          Stream<List<Song>>
         >
-    with $FutureModifier<List<model.Song>>, $StreamProvider<List<model.Song>> {
+    with $FutureModifier<List<Song>>, $StreamProvider<List<Song>> {
   AllSongsProvider._()
     : super(
         from: null,
@@ -118,17 +118,54 @@ final class AllSongsProvider
 
   @$internal
   @override
-  $StreamProviderElement<List<model.Song>> $createElement(
-    $ProviderPointer pointer,
-  ) => $StreamProviderElement(pointer);
+  $StreamProviderElement<List<Song>> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
 
   @override
-  Stream<List<model.Song>> create(Ref ref) {
+  Stream<List<Song>> create(Ref ref) {
     return allSongs(ref);
   }
 }
 
-String _$allSongsHash() => r'c95259e8876876215491ad823ee382b4aa0b276c';
+String _$allSongsHash() => r'482d960dcb1d50a57f3e14f1de5d51df96e2cc1f';
+
+@ProviderFor(recentSongs)
+final recentSongsProvider = RecentSongsProvider._();
+
+final class RecentSongsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Song>>,
+          List<Song>,
+          Stream<List<Song>>
+        >
+    with $FutureModifier<List<Song>>, $StreamProvider<List<Song>> {
+  RecentSongsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'recentSongsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$recentSongsHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<List<Song>> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<Song>> create(Ref ref) {
+    return recentSongs(ref);
+  }
+}
+
+String _$recentSongsHash() => r'38584611eb9510c4290cd1403cc2323d001fb350';
 
 @ProviderFor(audioHandler)
 final audioHandlerProvider = AudioHandlerProvider._();
@@ -136,11 +173,13 @@ final audioHandlerProvider = AudioHandlerProvider._();
 final class AudioHandlerProvider
     extends
         $FunctionalProvider<
-          AsyncValue<AudioHandler>,
-          AudioHandler,
-          FutureOr<AudioHandler>
+          AsyncValue<MPlayerAudioHandler>,
+          MPlayerAudioHandler,
+          FutureOr<MPlayerAudioHandler>
         >
-    with $FutureModifier<AudioHandler>, $FutureProvider<AudioHandler> {
+    with
+        $FutureModifier<MPlayerAudioHandler>,
+        $FutureProvider<MPlayerAudioHandler> {
   AudioHandlerProvider._()
     : super(
         from: null,
@@ -157,14 +196,14 @@ final class AudioHandlerProvider
 
   @$internal
   @override
-  $FutureProviderElement<AudioHandler> $createElement(
+  $FutureProviderElement<MPlayerAudioHandler> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<AudioHandler> create(Ref ref) {
+  FutureOr<MPlayerAudioHandler> create(Ref ref) {
     return audioHandler(ref);
   }
 }
 
-String _$audioHandlerHash() => r'b28ad20af9c9fc52b1ebbb78f32933a617832026';
+String _$audioHandlerHash() => r'35dd4a9fa4b51b74ea91a71b35e30eaf1d13a0e2';

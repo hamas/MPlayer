@@ -4,6 +4,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_database.g.dart';
 
@@ -42,23 +43,101 @@ class PlaylistSongsTable extends Table {
 class HistoryTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get songId => text().references(SongsTable, #id)();
-  DateTimeColumn get playedAt => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get datePlayed => dateTime()();
+}
+
+class SettingsTable extends Table {
+  TextColumn get key => text()();
+  TextColumn get value => text()();
+
+  @override
+  Set<Column> get primaryKey => {key};
+}
+
+class LyricsTable extends Table {
+  TextColumn get songId => text()(); // Links to SongsTable.id (path)
+  IntColumn get lrclibId => integer()();
+  TextColumn get plainLyrics => text().nullable()();
+  TextColumn get syncedLyrics => text().nullable()();
+  DateTimeColumn get savedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {songId};
+}
+
+class ExcludedFoldersTable extends Table {
+  TextColumn get path => text()();
+
+  @override
+  Set<Column> get primaryKey => {path};
+}
+
+class CloudSongsTable extends Table {
+  TextColumn get id => text()(); // YouTube VideoID
+  TextColumn get title => text()();
+  TextColumn get artist => text()();
+  TextColumn get album => text().withDefault(const Constant('YouTube Music'))();
+  TextColumn get thumbnailUri => text().nullable()();
+  IntColumn get duration => integer().withDefault(const Constant(0))();
+  DateTimeColumn get dateAdded => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
 }
 
 @DriftDatabase(
-  tables: [SongsTable, PlaylistsTable, PlaylistSongsTable, HistoryTable],
+  tables: [
+    SongsTable,
+    PlaylistsTable,
+    PlaylistSongsTable,
+    HistoryTable,
+    SettingsTable,
+    LyricsTable,
+    ExcludedFoldersTable,
+    CloudSongsTable,
+  ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (Migrator m) async {
+        await m.createAll();
+      },
+      onUpgrade: (Migrator m, int from, int to) async {
+        if (from < 2) {
+          await m.createTable(cloudSongsTable);
+        }
+      },
+    );
+  }
+}
+
+@Riverpod(keepAlive: true)
+AppDatabase appDatabase(Ref ref) {
+  return AppDatabase();
 }
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'mplayer_db.sqlite'));
-    return NativeDatabase.createInBackground(file);
+    return NativeDatabase.createInBackground(
+      file,
+      logStatements: false,
+      setup: (rawDb) {
+        // WAL mode: allows concurrent reads while writing (critical for 10k+ songs)
+        rawDb.execute('PRAGMA journal_mode=WAL;');
+        // NORMAL sync: safe and much faster than FULL
+        rawDb.execute('PRAGMA synchronous=NORMAL;');
+        // Larger cache = faster queries on big libraries
+        rawDb.execute('PRAGMA cache_size=-20000;'); // ~20MB cache
+      },
+    );
   });
 }
