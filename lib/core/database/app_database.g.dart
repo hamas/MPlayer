@@ -114,6 +114,18 @@ class $SongsTableTable extends SongsTable
     requiredDuringInsert: false,
     defaultValue: const Constant(0),
   );
+  static const VerificationMeta _skipCountMeta = const VerificationMeta(
+    'skipCount',
+  );
+  @override
+  late final GeneratedColumn<int> skipCount = GeneratedColumn<int>(
+    'skip_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
   static const VerificationMeta _dateAddedMeta = const VerificationMeta(
     'dateAdded',
   );
@@ -137,6 +149,7 @@ class $SongsTableTable extends SongsTable
     artworkUri,
     isFavorite,
     playCount,
+    skipCount,
     dateAdded,
   ];
   @override
@@ -218,6 +231,12 @@ class $SongsTableTable extends SongsTable
         playCount.isAcceptableOrUnknown(data['play_count']!, _playCountMeta),
       );
     }
+    if (data.containsKey('skip_count')) {
+      context.handle(
+        _skipCountMeta,
+        skipCount.isAcceptableOrUnknown(data['skip_count']!, _skipCountMeta),
+      );
+    }
     if (data.containsKey('date_added')) {
       context.handle(
         _dateAddedMeta,
@@ -273,6 +292,10 @@ class $SongsTableTable extends SongsTable
         DriftSqlType.int,
         data['${effectivePrefix}play_count'],
       )!,
+      skipCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}skip_count'],
+      )!,
       dateAdded: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}date_added'],
@@ -297,6 +320,7 @@ class SongsTableData extends DataClass implements Insertable<SongsTableData> {
   final String? artworkUri;
   final bool isFavorite;
   final int playCount;
+  final int skipCount;
   final DateTime? dateAdded;
   const SongsTableData({
     required this.id,
@@ -309,6 +333,7 @@ class SongsTableData extends DataClass implements Insertable<SongsTableData> {
     this.artworkUri,
     required this.isFavorite,
     required this.playCount,
+    required this.skipCount,
     this.dateAdded,
   });
   @override
@@ -326,6 +351,7 @@ class SongsTableData extends DataClass implements Insertable<SongsTableData> {
     }
     map['is_favorite'] = Variable<bool>(isFavorite);
     map['play_count'] = Variable<int>(playCount);
+    map['skip_count'] = Variable<int>(skipCount);
     if (!nullToAbsent || dateAdded != null) {
       map['date_added'] = Variable<DateTime>(dateAdded);
     }
@@ -346,6 +372,7 @@ class SongsTableData extends DataClass implements Insertable<SongsTableData> {
           : Value(artworkUri),
       isFavorite: Value(isFavorite),
       playCount: Value(playCount),
+      skipCount: Value(skipCount),
       dateAdded: dateAdded == null && nullToAbsent
           ? const Value.absent()
           : Value(dateAdded),
@@ -368,6 +395,7 @@ class SongsTableData extends DataClass implements Insertable<SongsTableData> {
       artworkUri: serializer.fromJson<String?>(json['artworkUri']),
       isFavorite: serializer.fromJson<bool>(json['isFavorite']),
       playCount: serializer.fromJson<int>(json['playCount']),
+      skipCount: serializer.fromJson<int>(json['skipCount']),
       dateAdded: serializer.fromJson<DateTime?>(json['dateAdded']),
     );
   }
@@ -385,6 +413,7 @@ class SongsTableData extends DataClass implements Insertable<SongsTableData> {
       'artworkUri': serializer.toJson<String?>(artworkUri),
       'isFavorite': serializer.toJson<bool>(isFavorite),
       'playCount': serializer.toJson<int>(playCount),
+      'skipCount': serializer.toJson<int>(skipCount),
       'dateAdded': serializer.toJson<DateTime?>(dateAdded),
     };
   }
@@ -400,6 +429,7 @@ class SongsTableData extends DataClass implements Insertable<SongsTableData> {
     Value<String?> artworkUri = const Value.absent(),
     bool? isFavorite,
     int? playCount,
+    int? skipCount,
     Value<DateTime?> dateAdded = const Value.absent(),
   }) => SongsTableData(
     id: id ?? this.id,
@@ -412,6 +442,7 @@ class SongsTableData extends DataClass implements Insertable<SongsTableData> {
     artworkUri: artworkUri.present ? artworkUri.value : this.artworkUri,
     isFavorite: isFavorite ?? this.isFavorite,
     playCount: playCount ?? this.playCount,
+    skipCount: skipCount ?? this.skipCount,
     dateAdded: dateAdded.present ? dateAdded.value : this.dateAdded,
   );
   SongsTableData copyWithCompanion(SongsTableCompanion data) {
@@ -430,6 +461,7 @@ class SongsTableData extends DataClass implements Insertable<SongsTableData> {
           ? data.isFavorite.value
           : this.isFavorite,
       playCount: data.playCount.present ? data.playCount.value : this.playCount,
+      skipCount: data.skipCount.present ? data.skipCount.value : this.skipCount,
       dateAdded: data.dateAdded.present ? data.dateAdded.value : this.dateAdded,
     );
   }
@@ -447,6 +479,7 @@ class SongsTableData extends DataClass implements Insertable<SongsTableData> {
           ..write('artworkUri: $artworkUri, ')
           ..write('isFavorite: $isFavorite, ')
           ..write('playCount: $playCount, ')
+          ..write('skipCount: $skipCount, ')
           ..write('dateAdded: $dateAdded')
           ..write(')'))
         .toString();
@@ -464,6 +497,7 @@ class SongsTableData extends DataClass implements Insertable<SongsTableData> {
     artworkUri,
     isFavorite,
     playCount,
+    skipCount,
     dateAdded,
   );
   @override
@@ -480,6 +514,7 @@ class SongsTableData extends DataClass implements Insertable<SongsTableData> {
           other.artworkUri == this.artworkUri &&
           other.isFavorite == this.isFavorite &&
           other.playCount == this.playCount &&
+          other.skipCount == this.skipCount &&
           other.dateAdded == this.dateAdded);
 }
 
@@ -494,6 +529,7 @@ class SongsTableCompanion extends UpdateCompanion<SongsTableData> {
   final Value<String?> artworkUri;
   final Value<bool> isFavorite;
   final Value<int> playCount;
+  final Value<int> skipCount;
   final Value<DateTime?> dateAdded;
   final Value<int> rowid;
   const SongsTableCompanion({
@@ -507,6 +543,7 @@ class SongsTableCompanion extends UpdateCompanion<SongsTableData> {
     this.artworkUri = const Value.absent(),
     this.isFavorite = const Value.absent(),
     this.playCount = const Value.absent(),
+    this.skipCount = const Value.absent(),
     this.dateAdded = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -521,6 +558,7 @@ class SongsTableCompanion extends UpdateCompanion<SongsTableData> {
     this.artworkUri = const Value.absent(),
     this.isFavorite = const Value.absent(),
     this.playCount = const Value.absent(),
+    this.skipCount = const Value.absent(),
     this.dateAdded = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
@@ -539,6 +577,7 @@ class SongsTableCompanion extends UpdateCompanion<SongsTableData> {
     Expression<String>? artworkUri,
     Expression<bool>? isFavorite,
     Expression<int>? playCount,
+    Expression<int>? skipCount,
     Expression<DateTime>? dateAdded,
     Expression<int>? rowid,
   }) {
@@ -553,6 +592,7 @@ class SongsTableCompanion extends UpdateCompanion<SongsTableData> {
       if (artworkUri != null) 'artwork_uri': artworkUri,
       if (isFavorite != null) 'is_favorite': isFavorite,
       if (playCount != null) 'play_count': playCount,
+      if (skipCount != null) 'skip_count': skipCount,
       if (dateAdded != null) 'date_added': dateAdded,
       if (rowid != null) 'rowid': rowid,
     });
@@ -569,6 +609,7 @@ class SongsTableCompanion extends UpdateCompanion<SongsTableData> {
     Value<String?>? artworkUri,
     Value<bool>? isFavorite,
     Value<int>? playCount,
+    Value<int>? skipCount,
     Value<DateTime?>? dateAdded,
     Value<int>? rowid,
   }) {
@@ -583,6 +624,7 @@ class SongsTableCompanion extends UpdateCompanion<SongsTableData> {
       artworkUri: artworkUri ?? this.artworkUri,
       isFavorite: isFavorite ?? this.isFavorite,
       playCount: playCount ?? this.playCount,
+      skipCount: skipCount ?? this.skipCount,
       dateAdded: dateAdded ?? this.dateAdded,
       rowid: rowid ?? this.rowid,
     );
@@ -621,6 +663,9 @@ class SongsTableCompanion extends UpdateCompanion<SongsTableData> {
     if (playCount.present) {
       map['play_count'] = Variable<int>(playCount.value);
     }
+    if (skipCount.present) {
+      map['skip_count'] = Variable<int>(skipCount.value);
+    }
     if (dateAdded.present) {
       map['date_added'] = Variable<DateTime>(dateAdded.value);
     }
@@ -643,6 +688,7 @@ class SongsTableCompanion extends UpdateCompanion<SongsTableData> {
           ..write('artworkUri: $artworkUri, ')
           ..write('isFavorite: $isFavorite, ')
           ..write('playCount: $playCount, ')
+          ..write('skipCount: $skipCount, ')
           ..write('dateAdded: $dateAdded, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -2684,6 +2730,7 @@ typedef $$SongsTableTableCreateCompanionBuilder =
       Value<String?> artworkUri,
       Value<bool> isFavorite,
       Value<int> playCount,
+      Value<int> skipCount,
       Value<DateTime?> dateAdded,
       Value<int> rowid,
     });
@@ -2699,6 +2746,7 @@ typedef $$SongsTableTableUpdateCompanionBuilder =
       Value<String?> artworkUri,
       Value<bool> isFavorite,
       Value<int> playCount,
+      Value<int> skipCount,
       Value<DateTime?> dateAdded,
       Value<int> rowid,
     });
@@ -2809,6 +2857,11 @@ class $$SongsTableTableFilterComposer
 
   ColumnFilters<int> get playCount => $composableBuilder(
     column: $table.playCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get skipCount => $composableBuilder(
+    column: $table.skipCount,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2927,6 +2980,11 @@ class $$SongsTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get skipCount => $composableBuilder(
+    column: $table.skipCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get dateAdded => $composableBuilder(
     column: $table.dateAdded,
     builder: (column) => ColumnOrderings(column),
@@ -2975,6 +3033,9 @@ class $$SongsTableTableAnnotationComposer
 
   GeneratedColumn<int> get playCount =>
       $composableBuilder(column: $table.playCount, builder: (column) => column);
+
+  GeneratedColumn<int> get skipCount =>
+      $composableBuilder(column: $table.skipCount, builder: (column) => column);
 
   GeneratedColumn<DateTime> get dateAdded =>
       $composableBuilder(column: $table.dateAdded, builder: (column) => column);
@@ -3072,6 +3133,7 @@ class $$SongsTableTableTableManager
                 Value<String?> artworkUri = const Value.absent(),
                 Value<bool> isFavorite = const Value.absent(),
                 Value<int> playCount = const Value.absent(),
+                Value<int> skipCount = const Value.absent(),
                 Value<DateTime?> dateAdded = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => SongsTableCompanion(
@@ -3085,6 +3147,7 @@ class $$SongsTableTableTableManager
                 artworkUri: artworkUri,
                 isFavorite: isFavorite,
                 playCount: playCount,
+                skipCount: skipCount,
                 dateAdded: dateAdded,
                 rowid: rowid,
               ),
@@ -3100,6 +3163,7 @@ class $$SongsTableTableTableManager
                 Value<String?> artworkUri = const Value.absent(),
                 Value<bool> isFavorite = const Value.absent(),
                 Value<int> playCount = const Value.absent(),
+                Value<int> skipCount = const Value.absent(),
                 Value<DateTime?> dateAdded = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => SongsTableCompanion.insert(
@@ -3113,6 +3177,7 @@ class $$SongsTableTableTableManager
                 artworkUri: artworkUri,
                 isFavorite: isFavorite,
                 playCount: playCount,
+                skipCount: skipCount,
                 dateAdded: dateAdded,
                 rowid: rowid,
               ),

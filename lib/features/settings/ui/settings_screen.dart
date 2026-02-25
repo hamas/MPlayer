@@ -5,6 +5,8 @@ import 'package:mplayer/features/audio/logic/song_repository.dart';
 import 'package:mplayer/features/server/logic/server_provider.dart';
 import 'package:mplayer/features/settings/logic/settings_provider.dart';
 import 'package:mplayer/features/settings/logic/settings_repository.dart';
+import 'package:mplayer/features/settings/ui/audio_settings_screen.dart';
+import 'package:mplayer/features/settings/ui/theme_settings_screen.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -203,6 +205,48 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ),
             ),
           ),
+          const SizedBox(height: 24),
+
+          // Advanced Section
+          const Text(
+            'Advanced',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          Card(
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.tune),
+                  title: const Text('Audio Settings'),
+                  subtitle: const Text('Crossfade, gapless, skip silence'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const AudioSettingsScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(),
+                ListTile(
+                  leading: const Icon(Icons.palette),
+                  title: const Text('Theme Studio'),
+                  subtitle: const Text('AMOLED black, colors, app icon'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const ThemeSettingsScreen(),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
         ],
       ),
     );

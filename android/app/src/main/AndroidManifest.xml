@@ -11,6 +11,13 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification" />
+        <meta-data
+            android:name="default_notification_icon"
+            android:resource="@drawable/ic_notification" />
+        
         <service android:name="com.ryanheise.audioservice.AudioService"
             android:foregroundServiceType="mediaPlayback"
             android:exported="true">

@@ -58,7 +58,26 @@ dev_dependencies:
   chopper_generator: ^8.6.0
   json_serializable: ^6.12.0
   freezed: ^3.2.5
+  flutter_launcher_icons: ^0.13.1
 
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/icon/
+
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/icon/app_icon.png"
+  adaptive_icon_background: "#303030"
+  adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
+  web:
+    generate: true
+    image_path: "assets/icon/app_icon.png"
+    background_color: "#303030"
+    theme_color: "#303030"
+  windows:
+    generate: true
+    image_path: "assets/icon/app_icon.png"
+    icon_size: 256

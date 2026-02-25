@@ -104,21 +104,8 @@ class _AiPlaylistScreenState extends ConsumerState<AiPlaylistScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('AI Playlist Generator'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const SettingsScreen()),
-              );
-            },
-          ),
-        ],
-      ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
             // Input Section
@@ -213,14 +200,18 @@ class _AiPlaylistScreenState extends ConsumerState<AiPlaylistScreen> {
                 ),
               )
             else
-              const Expanded(
+              Expanded(
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.auto_awesome, size: 64, color: Colors.grey),
-                      SizedBox(height: 16),
-                      Text('Enter a prompt to generate a playlist.'),
+                      Icon(
+                        Icons.auto_awesome,
+                        size: 64,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(height: 16),
+                      const Text('Enter a prompt to generate a playlist.'),
                     ],
                   ),
                 ),

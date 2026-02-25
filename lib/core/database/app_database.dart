@@ -19,6 +19,7 @@ class SongsTable extends Table {
   TextColumn get artworkUri => text().nullable()();
   BoolColumn get isFavorite => boolean().withDefault(const Constant(false))();
   IntColumn get playCount => integer().withDefault(const Constant(0))();
+  IntColumn get skipCount => integer().withDefault(const Constant(0))();
   DateTimeColumn get dateAdded => dateTime().nullable()();
 
   @override
@@ -101,7 +102,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration {
@@ -112,6 +113,9 @@ class AppDatabase extends _$AppDatabase {
       onUpgrade: (Migrator m, int from, int to) async {
         if (from < 2) {
           await m.createTable(cloudSongsTable);
+        }
+        if (from < 3) {
+          await m.addColumn(songsTable, songsTable.skipCount);
         }
       },
     );

@@ -5,6 +5,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mplayer/features/audio/logic/audio_providers.dart';
+import 'package:mplayer/features/audio/ui/lyrics_offset_sheet.dart';
 import 'package:mplayer/presentation/components/wavy_music_slider.dart';
 
 class PlayerScreen extends ConsumerWidget {
@@ -25,10 +26,24 @@ class PlayerScreen extends ConsumerWidget {
           tooltip: 'Collapse',
         ),
         actions: [
-          IconButton(
+          PopupMenuButton<String>(
             icon: const Icon(Icons.more_vert_rounded),
-            onPressed: () {},
             tooltip: 'Options',
+            onSelected: (value) {
+              if (value == 'offset') {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) => const LyricsOffsetSheet(),
+                );
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'offset',
+                child: Text('Adjust Lyrics Timing'),
+              ),
+            ],
           ),
         ],
       ),

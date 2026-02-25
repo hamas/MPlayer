@@ -71,7 +71,7 @@ class BottomPlayer extends ConsumerWidget {
                         tag: 'media_artwork',
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
-                          child: _buildArtwork(mediaItem.artUri),
+                          child: _buildArtwork(context, mediaItem.artUri),
                         ),
                       ),
                     ),
@@ -120,6 +120,7 @@ class BottomPlayer extends ConsumerWidget {
                             icon: const Icon(Icons.skip_next_rounded),
                             onPressed: handler.skipToNext,
                           ),
+                          const SizedBox(width: 8),
                         ],
                       );
                     },
@@ -135,11 +136,14 @@ class BottomPlayer extends ConsumerWidget {
     );
   }
 
-  Widget _buildArtwork(Uri? uri) {
+  Widget _buildArtwork(BuildContext context, Uri? uri) {
     if (uri == null) {
       return Container(
-        color: Colors.grey.shade800,
-        child: const Icon(Icons.music_note, color: Colors.white),
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        child: Icon(
+          Icons.music_note,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
       );
     }
 
@@ -147,8 +151,9 @@ class BottomPlayer extends ConsumerWidget {
       return Image.file(
         File(uri.toFilePath()),
         fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) =>
-            Container(color: Colors.grey),
+        errorBuilder: (context, error, stackTrace) => Container(
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        ),
       );
     }
 
@@ -156,8 +161,9 @@ class BottomPlayer extends ConsumerWidget {
     return Image.network(
       uri.toString(),
       fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) =>
-          Container(color: Colors.grey),
+      errorBuilder: (context, error, stackTrace) => Container(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      ),
     );
   }
 }

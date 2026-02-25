@@ -17,6 +17,7 @@ abstract class Song with _$Song {
     String? artworkUri,
     @Default(false) bool isFavorite,
     @Default(0) int playCount,
+    @Default(0) int skipCount,
     DateTime? dateAdded,
   }) = _Song;
 

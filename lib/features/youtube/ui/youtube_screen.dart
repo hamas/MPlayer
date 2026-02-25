@@ -132,43 +132,46 @@ class _YouTubeScreenState extends ConsumerState<YouTubeScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('YT Music'),
-        actions: [
-          if (isLoggedIn)
-            IconButton(
-              icon: const Icon(Icons.logout),
-              tooltip: 'Disconnect Account',
-              onPressed: () {
-                ref.read(youtubeAuthProvider.notifier).clearCookies();
-                setState(() => _searchResults.clear());
-              },
-            ),
-        ],
-      ),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Search songs, artists...',
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    _searchController.clear();
-                    setState(() => _searchResults.clear());
-                  },
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search songs, artists...',
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() => _searchResults.clear());
+                        },
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      filled: true,
+                      fillColor: theme.colorScheme.surfaceContainerHighest,
+                    ),
+                    onSubmitted: _performSearch,
+                  ),
                 ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                filled: true,
-                fillColor: theme.colorScheme.surfaceContainerHighest,
-              ),
-              onSubmitted: _performSearch,
+                if (isLoggedIn) ...[
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: const Icon(Icons.logout),
+                    tooltip: 'Disconnect Account',
+                    onPressed: () {
+                      ref.read(youtubeAuthProvider.notifier).clearCookies();
+                      setState(() => _searchResults.clear());
+                    },
+                  ),
+                ],
+              ],
             ),
           ),
 
@@ -189,7 +192,10 @@ class _YouTubeScreenState extends ConsumerState<YouTubeScreen> {
                       style: theme.textTheme.titleMedium,
                     ),
                     const SizedBox(height: 8),
-                    const Text('OR', style: TextStyle(color: Colors.grey)),
+                    Text(
+                      'OR',
+                      style: TextStyle(color: theme.colorScheme.outline),
+                    ),
                     const SizedBox(height: 8),
                     FilledButton.icon(
                       onPressed: () => showYouTubeLoginModal(context),

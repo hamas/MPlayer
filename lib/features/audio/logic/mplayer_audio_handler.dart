@@ -11,6 +11,7 @@ Future<MPlayerAudioHandler> initAudioService() async {
       androidNotificationChannelName: 'MPlayer Audio',
       androidNotificationOngoing: true,
       androidStopForegroundOnPause: true,
+      androidNotificationIcon: 'drawable/ic_notification',
     ),
   );
   return handler;

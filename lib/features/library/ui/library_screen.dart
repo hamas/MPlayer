@@ -107,6 +107,7 @@ class _SongListState extends ConsumerState<_SongList> {
           final isSelected = _selectedIds.contains(song.id);
 
           return ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
                 selected: isSelected,
                 selectedTileColor: Theme.of(
                   context,

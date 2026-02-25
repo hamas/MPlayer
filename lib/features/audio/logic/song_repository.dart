@@ -125,6 +125,7 @@ class SongRepository {
       artworkUri: row.artworkUri,
       isFavorite: row.isFavorite,
       playCount: row.playCount,
+      skipCount: row.skipCount,
     );
   }
 

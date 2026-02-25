@@ -25,9 +25,15 @@ final dynamicColorSchemeProvider = StreamProvider<ColorScheme?>((ref) async* {
       final palette = await PaletteGenerator.fromImageProvider(imageProvider);
 
       if (palette.dominantColor != null) {
-        yield ColorScheme.fromSeed(seedColor: palette.dominantColor!.color);
+        yield ColorScheme.fromSeed(
+          seedColor: palette.dominantColor!.color,
+          dynamicSchemeVariant: DynamicSchemeVariant.expressive,
+        );
       } else if (palette.mutedColor != null) {
-        yield ColorScheme.fromSeed(seedColor: palette.mutedColor!.color);
+        yield ColorScheme.fromSeed(
+          seedColor: palette.mutedColor!.color,
+          dynamicSchemeVariant: DynamicSchemeVariant.expressive,
+        );
       } else {
         yield null;
       }
