@@ -1,51 +1,63 @@
 # MPlayer
 
-MPlayer is a cutting-edge, open-source music player developed in 100% **Dart** using the **Flutter** framework. It is designed to be the ultimate audio experience for Android and beyond, offering a pixel-perfect implementation of modern **Material 3 Expressive** design guidelines. MPlayer is a spiritual successor to PixelPlayer, re-engineered for cross-platform performance and maintainability.
+MPlayer is a cutting-edge, open-source music player developed in 100% **Dart** using the **Flutter** framework. It is designed to be the ultimate audio experience for Android and beyond, offering a pixel-perfect implementation of modern **Material 3 Expressive** design guidelines. MPlayer is a spiritual successor to PixelPlayer, deeply re-engineered for structural scalability and maintainability.
 
 ![MPlayer Banner](https://via.placeholder.com/1280x640.png?text=MPlayer+Expressive+UI)
 
 ## 🚀 Features
 
 ### 🎧 Pro Audio Experience
--   **10-Band Equalizer & Effects**: Built-in native Android EQ with Bass Boost and genre presets.
--   **Gapless & Crossfade**: Smooth audio transitions configurable up to 10 seconds.
+-   **Native Equalization**: Built-in Android EQ and Loudness Enhancer dynamically piped through the `just_audio` pipeline.
+-   **Gapless & Crossfade**: Smooth audio transitions configurable up to 12 seconds in the Advanced Audio settings.
 -   **Local Playback**: Seamlessly scans and plays audio files with Isolate-backed lightning-fast indexing.
--   **Background Playback**: Robust service continues music when the app is minimized or the screen is off.
+-   **Synchronized Lyrics Sync**: Displays LRC synced lyrics with a built-in **Lyrics Offset Editor** to manually correct timing misalignments (+/- 100ms precision).
+-   **Background Playback**: Robust `audio_service` integration continues music when the app is minimized or the screen is off.
 -   **Waveform Visualizer**: Real-time interactive wavy slider `WavyMusicSlider` on the Now Playing screen.
 
 ### ☁️ YouTube Music Integration ($0 Cost API-Keyless)
--   **Hybrid InnerTube Engine**: Browse and search YouTube's global catalog without needing a developer API key.
+-   **Hybrid InnerTube Engine**: Browse and search YouTube's global catalog without needing a developer API key via `youtube_explode_dart`.
 -   **Secure Authentication**: Log in to access your "Liked Songs" directly via an expressive M3 WebView.
 -   **Offline Downloads**: Download directly from YouTube stream `.m4a` sources and instantly add them to your local library.
+
+### 📊 Deep Analytics & AI
+-   **Statistics Hub**: Tracks total listening time, skipping habits, and extracts your top played tracks directly from the local `drift` database.
+-   **AI Music Persona**: Uses the **Gemini 1.5 Flash** SDK (`google_generative_ai`) to analyze your playback history and synthesize a customized "Music Persona".
+-   **AI Playlists**: Ask for "somber music for a rainy night" and get a generated local playlist instantly via Gemini.
 
 ### 🎨 Material 3 Expressive UI
 -   **Motion-Rich**: Fluid `flutter_animate` bouncy physics, shared element transitions, and extreme responsiveness.
 -   **Dynamic Theming**: Automatically adapts the app's color scheme to match the currently playing Album Art using `palette_generator`.
--   **Expressive Layouts**: Big, bold typography and easy-to-reach UI controls.
+-   **Advanced Theme Studio**: Override the Material You wallpaper seed with custom swatches, and force True AMOLED Black mode instead of standard dark grey.
 
-### 🧠 Smart Features & Tools
--   **AI Playlists (Gemini)**: Ask for "somber music for a rainy night" and get a generated playlist instantly.
+### 🧠 Smart Tools
 -   **Batch Tag Editor**: Natively overwrite raw MP3/FLAC/M4A ID3 metadata blocks directly on your local storage.
--   **Folder Exclusion**: Safely hide private audio directories like WhatsApp Voice Notes from the library scanner.
+-   **Folder Exclusion**: Safely hide private audio directories (like WhatsApp Voice Notes) from the library scanner.
 -   **Android Auto**: Fully compatible with car displays and home widgets.
 
-## 🛠 Tech Stack
+## 🛠 Tech Stack & Architecture
 
+### Dependency Matrix
 MPlayer is built with the absolute latest and most robust Dart technologies:
+*   **Language**: Dart ^3.8.0 (100% pure Dart codebase)
+*   **Framework**: Flutter (Stable)
+*   **State Management**: `flutter_riverpod` (^3.2.1) + `riverpod_annotation`
+*   **Database**: `drift` (^2.31.0) with Background Isolates via `sqlite3_flutter_libs`
+*   **Networking**: `dio` (^5.9.1) + `chopper` (^8.5.0) for internal apis, `youtube_explode_dart` for YT.
+*   **Audio Engine**: `just_audio` (^0.10.5) + `audio_service`
+*   **Security**: `flutter_secure_storage` (^10.0.0)
+*   **AI**: `google_generative_ai` (^0.4.7)
 
-*   **Language**: Dart 3.x (100% pure Dart codebase)
-*   **Framework**: Flutter
-*   **Architecture**: Riverpod 3.x (State Management) + Feature-First (Screaming) Architecture
-*   **Database**: `drift` (Type-safe SQLite with Background Isolates)
-*   **Networking**: `dio` + `youtube_explode_dart` + `lrclib`
-*   **Audio Engine**: `just_audio` + `audio_service` + `audio_metadata_reader`
-*   **Security**: `flutter_secure_storage`
-*   **AI**: `google_generative_ai` (Gemini SDK)
+### Feature-First (Screaming) Architecture
+The project strictly enforces a highly scalable structured blueprint:
+- `lib/core/`: Global agnostic setup (Drift configs, Material 3 AppTheme, HTTP clients).
+- `lib/features/`: The screaming domains (`audio`, `library`, `stats`, `settings`, `youtube`). 
+   - Each feature encapsulates its own `ui/`, `logic/`, and `models/`.
+- `lib/presentation/`: Cross-feature UI constants and generic widgets.
 
 ## 📥 Installation
 
 ### Prerequisites
--   Flutter SDK (Legacy or Stable channel, compatible with Dart 3.x)
+-   Flutter SDK (Compatible with Dart 3.8+)
 -   Android Studio / VS Code
 -   Connected Android Device or Emulator
 
@@ -63,7 +75,7 @@ MPlayer is built with the absolute latest and most robust Dart technologies:
     ```
 
 3.  **Generate Code**
-    MPlayer uses code generation for JSON serialization, Riverpod providers, and the database.
+    MPlayer uses active code generation for JSON serialization (`freezed`), Riverpod providers, and the Drift database schema.
     ```bash
     dart run build_runner build --delete-conflicting-outputs
     ```
@@ -72,16 +84,7 @@ MPlayer is built with the absolute latest and most robust Dart technologies:
     ```bash
     flutter run
     ```
-
-## 🗺️ Roadmap (100% Completed)
-
-- [x] **Phase 1: Foundation**: Isolate-backed Drift Database, Pure Dart Scanner.
-- [x] **Phase 2: Networking & Parity**: Synchronized Lyrics, Deep Folder Trees, Custom Waveform Sliders.
-- [x] **Phase 3: Pro Audio**: 10-Band EQ, Bass Boost, Gapless & Crossfade, Native Batch Tag Editor.
-- [x] **Phase 4: Ecosystem**: Android Auto integration, Home Screen Widgets, Gemini AI.
-- [x] **Phase 5: Polish**: Dynamic Album Art Theming, Spring Animations, Storage Exclusion rules.
-- [x] **Phase 6: YouTube Music**: Hybrid API-Keyless Architecture, Cookies Extraction, Offline Track Downloading.
-- [x] **Phase 7: Optimization**: 100% Codebase Standardization, Outdated Package Elimination, Strict Security Audits.
+    *(Note: To test Gemini AI features, you must safely inject your personal API key via the in-app Advanced Settings hub).*
 
 ## 🤝 Contributing
 
