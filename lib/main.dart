@@ -20,13 +20,25 @@ class MPlayerApp extends ConsumerWidget {
 
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
-        final lightScheme = albumColorScheme ?? lightDynamic;
+        // dynamic_color 2.x uses the independently versioned Material UI
+        // ColorScheme. Re-seed Flutter's ColorScheme at this package boundary.
+        final systemLightScheme = lightDynamic == null
+            ? null
+            : ColorScheme.fromSeed(seedColor: lightDynamic.primary);
+        final systemDarkScheme = darkDynamic == null
+            ? null
+            : ColorScheme.fromSeed(
+                seedColor: darkDynamic.primary,
+                brightness: Brightness.dark,
+              );
+
+        final lightScheme = albumColorScheme ?? systemLightScheme;
         final darkScheme = albumColorScheme != null
             ? ColorScheme.fromSeed(
                 seedColor: albumColorScheme.primary,
                 brightness: Brightness.dark,
               )
-            : darkDynamic;
+            : systemDarkScheme;
 
         return MaterialApp(
           title: 'MPlayer',

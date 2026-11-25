@@ -2718,38 +2718,36 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   ];
 }
 
-typedef $$SongsTableTableCreateCompanionBuilder =
-    SongsTableCompanion Function({
-      required String id,
-      required String title,
-      required String artist,
-      required String album,
-      required String uri,
-      Value<int> duration,
-      Value<int> size,
-      Value<String?> artworkUri,
-      Value<bool> isFavorite,
-      Value<int> playCount,
-      Value<int> skipCount,
-      Value<DateTime?> dateAdded,
-      Value<int> rowid,
-    });
-typedef $$SongsTableTableUpdateCompanionBuilder =
-    SongsTableCompanion Function({
-      Value<String> id,
-      Value<String> title,
-      Value<String> artist,
-      Value<String> album,
-      Value<String> uri,
-      Value<int> duration,
-      Value<int> size,
-      Value<String?> artworkUri,
-      Value<bool> isFavorite,
-      Value<int> playCount,
-      Value<int> skipCount,
-      Value<DateTime?> dateAdded,
-      Value<int> rowid,
-    });
+typedef $$SongsTableTableCreateCompanionBuilder = SongsTableCompanion Function({
+  required String id,
+  required String title,
+  required String artist,
+  required String album,
+  required String uri,
+  Value<int> duration,
+  Value<int> size,
+  Value<String?> artworkUri,
+  Value<bool> isFavorite,
+  Value<int> playCount,
+  Value<int> skipCount,
+  Value<DateTime?> dateAdded,
+  Value<int> rowid,
+});
+typedef $$SongsTableTableUpdateCompanionBuilder = SongsTableCompanion Function({
+  Value<String> id,
+  Value<String> title,
+  Value<String> artist,
+  Value<String> album,
+  Value<String> uri,
+  Value<int> duration,
+  Value<int> size,
+  Value<String?> artworkUri,
+  Value<bool> isFavorite,
+  Value<int> playCount,
+  Value<int> skipCount,
+  Value<DateTime?> dateAdded,
+  Value<int> rowid,
+});
 
 final class $$SongsTableTableReferences
     extends BaseReferences<_$AppDatabase, $SongsTableTable, SongsTableData> {
@@ -2762,10 +2760,7 @@ final class $$SongsTableTableReferences
   _playlistSongsTableRefsTable(_$AppDatabase db) =>
       MultiTypedResultKey.fromTable(
         db.playlistSongsTable,
-        aliasName: $_aliasNameGenerator(
-          db.songsTable.id,
-          db.playlistSongsTable.songId,
-        ),
+        aliasName: 'songs_table__id__playlist_songs_table__song_id',
       );
 
   $$PlaylistSongsTableTableProcessedTableManager get playlistSongsTableRefs {
@@ -2785,7 +2780,7 @@ final class $$SongsTableTableReferences
   static MultiTypedResultKey<$HistoryTableTable, List<HistoryTableData>>
   _historyTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.historyTable,
-    aliasName: $_aliasNameGenerator(db.songsTable.id, db.historyTable.songId),
+    aliasName: 'songs_table__id__history_table__song_id',
   );
 
   $$HistoryTableTableProcessedTableManager get historyTableRefs {
@@ -3300,10 +3295,7 @@ final class $$PlaylistsTableTableReferences
   _playlistSongsTableRefsTable(_$AppDatabase db) =>
       MultiTypedResultKey.fromTable(
         db.playlistSongsTable,
-        aliasName: $_aliasNameGenerator(
-          db.playlistsTable.id,
-          db.playlistSongsTable.playlistId,
-        ),
+        aliasName: 'playlists_table__id__playlist_songs_table__playlist_id',
       );
 
   $$PlaylistSongsTableTableProcessedTableManager get playlistSongsTableRefs {
@@ -3575,13 +3567,9 @@ final class $$PlaylistSongsTableTableReferences
     super.$_typedResult,
   );
 
-  static $PlaylistsTableTable _playlistIdTable(_$AppDatabase db) =>
-      db.playlistsTable.createAlias(
-        $_aliasNameGenerator(
-          db.playlistSongsTable.playlistId,
-          db.playlistsTable.id,
-        ),
-      );
+  static $PlaylistsTableTable _playlistIdTable(_$AppDatabase db) => db
+      .playlistsTable
+      .createAlias('playlist_songs_table__playlist_id__playlists_table__id');
 
   $$PlaylistsTableTableProcessedTableManager get playlistId {
     final $_column = $_itemColumn<int>('playlist_id')!;
@@ -3597,10 +3585,8 @@ final class $$PlaylistSongsTableTableReferences
     );
   }
 
-  static $SongsTableTable _songIdTable(_$AppDatabase db) =>
-      db.songsTable.createAlias(
-        $_aliasNameGenerator(db.playlistSongsTable.songId, db.songsTable.id),
-      );
+  static $SongsTableTable _songIdTable(_$AppDatabase db) => db.songsTable
+      .createAlias('playlist_songs_table__song_id__songs_table__id');
 
   $$SongsTableTableProcessedTableManager get songId {
     final $_column = $_itemColumn<String>('song_id')!;
@@ -3884,34 +3870,26 @@ class $$PlaylistSongsTableTableTableManager
                     >
                   >(state) {
                     if (playlistId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.playlistId,
-                                referencedTable:
-                                    $$PlaylistSongsTableTableReferences
-                                        ._playlistIdTable(db),
-                                referencedColumn:
-                                    $$PlaylistSongsTableTableReferences
-                                        ._playlistIdTable(db)
-                                        .id,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.playlistId,
+                        referencedTable: $$PlaylistSongsTableTableReferences
+                            ._playlistIdTable(db),
+                        referencedColumn: $$PlaylistSongsTableTableReferences
+                            ._playlistIdTable(db)
+                            .id,
+                      ) as T;
                     }
                     if (songId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.songId,
-                                referencedTable:
-                                    $$PlaylistSongsTableTableReferences
-                                        ._songIdTable(db),
-                                referencedColumn:
-                                    $$PlaylistSongsTableTableReferences
-                                        ._songIdTable(db)
-                                        .id,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.songId,
+                        referencedTable: $$PlaylistSongsTableTableReferences
+                            ._songIdTable(db),
+                        referencedColumn: $$PlaylistSongsTableTableReferences
+                            ._songIdTable(db)
+                            .id,
+                      ) as T;
                     }
 
                     return state;
@@ -3958,9 +3936,7 @@ final class $$HistoryTableTableReferences
   $$HistoryTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static $SongsTableTable _songIdTable(_$AppDatabase db) =>
-      db.songsTable.createAlias(
-        $_aliasNameGenerator(db.historyTable.songId, db.songsTable.id),
-      );
+      db.songsTable.createAlias('history_table__song_id__songs_table__id');
 
   $$SongsTableTableProcessedTableManager get songId {
     final $_column = $_itemColumn<String>('song_id')!;
@@ -4179,17 +4155,15 @@ class $$HistoryTableTableTableManager
                     >
                   >(state) {
                     if (songId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.songId,
-                                referencedTable: $$HistoryTableTableReferences
-                                    ._songIdTable(db),
-                                referencedColumn: $$HistoryTableTableReferences
-                                    ._songIdTable(db)
-                                    .id,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.songId,
+                        referencedTable: $$HistoryTableTableReferences
+                            ._songIdTable(db),
+                        referencedColumn: $$HistoryTableTableReferences
+                            ._songIdTable(db)
+                            .id,
+                      ) as T;
                     }
 
                     return state;
@@ -4319,13 +4293,11 @@ class $$SettingsTableTableTableManager
               $$SettingsTableTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$SettingsTableTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<String> key = const Value.absent(),
-                Value<String> value = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) =>
-                  SettingsTableCompanion(key: key, value: value, rowid: rowid),
+          updateCompanionCallback: ({
+            Value<String> key = const Value.absent(),
+            Value<String> value = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) => SettingsTableCompanion(key: key, value: value, rowid: rowid),
           createCompanionCallback:
               ({
                 required String key,
@@ -4660,19 +4632,14 @@ class $$ExcludedFoldersTableTableTableManager
                 $db: db,
                 $table: table,
               ),
-          updateCompanionCallback:
-              ({
-                Value<String> path = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => ExcludedFoldersTableCompanion(path: path, rowid: rowid),
-          createCompanionCallback:
-              ({
-                required String path,
-                Value<int> rowid = const Value.absent(),
-              }) => ExcludedFoldersTableCompanion.insert(
-                path: path,
-                rowid: rowid,
-              ),
+          updateCompanionCallback: ({
+            Value<String> path = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) => ExcludedFoldersTableCompanion(path: path, rowid: rowid),
+          createCompanionCallback: ({
+            required String path,
+            Value<int> rowid = const Value.absent(),
+          }) => ExcludedFoldersTableCompanion.insert(path: path, rowid: rowid),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),

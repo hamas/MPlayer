@@ -38,8 +38,8 @@ MPlayer is a cutting-edge, open-source music player developed in 100% **Dart** u
 
 ### Dependency Matrix
 MPlayer is built with the absolute latest and most robust Dart technologies:
-*   **Language**: Dart ^3.8.0 (100% pure Dart codebase)
-*   **Framework**: Flutter (Stable)
+*   **Language**: Dart ^3.13.0 (100% pure Dart codebase)
+*   **Framework**: Flutter 3.47+
 *   **State Management**: `flutter_riverpod` (^3.2.1) + `riverpod_annotation`
 *   **Database**: `drift` (^2.31.0) with Background Isolates via `sqlite3_flutter_libs`
 *   **Networking**: `dio` (^5.9.1) + `chopper` (^8.5.0) for internal apis, `youtube_explode_dart` for YT.
@@ -57,7 +57,7 @@ The project strictly enforces a highly scalable structured blueprint:
 ## 📥 Installation
 
 ### Prerequisites
--   Flutter SDK (Compatible with Dart 3.8+)
+-   Flutter 3.47+ (includes Dart 3.13+)
 -   Android Studio / VS Code
 -   Connected Android Device or Emulator
 

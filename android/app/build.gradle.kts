@@ -7,7 +7,8 @@ plugins {
 
 android {
     namespace = "com.theveloper.mplayer.mplayer"
-    compileSdk = flutter.compileSdkVersion
+    // Required by current flutter_secure_storage and permission_handler.
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

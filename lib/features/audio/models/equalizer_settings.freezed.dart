@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'equalizer_settings.dart';
@@ -9,6 +9,7 @@ part of 'equalizer_settings.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -66,7 +67,7 @@ class _$EqualizerSettingsCopyWithImpl<$Res>
 /// Create a copy of EqualizerSettings
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? bands = null,Object? bassBoost = null,Object? virtualizer = null,Object? crossfadeDuration = null,}) {
-  return _then(_self.copyWith(
+  return _then(EqualizerSettings(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,bands: null == bands ? _self.bands : bands // ignore: cast_nullable_to_non_nullable
 as List<double>,bassBoost: null == bassBoost ? _self.bassBoost : bassBoost // ignore: cast_nullable_to_non_nullable
@@ -213,7 +214,7 @@ return $default(_that.enabled,_that.bands,_that.bassBoost,_that.virtualizer,_tha
 @JsonSerializable()
 
 class _EqualizerSettings implements EqualizerSettings {
-  const _EqualizerSettings({this.enabled = true, final  List<double> bands = const [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], this.bassBoost = 0.0, this.virtualizer = 0.0, this.crossfadeDuration = 0.0}): _bands = bands;
+  const _EqualizerSettings({this.enabled = true,  List<double> bands = const [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], this.bassBoost = 0.0, this.virtualizer = 0.0, this.crossfadeDuration = 0.0}): _bands = bands;
   factory _EqualizerSettings.fromJson(Map<String, dynamic> json) => _$EqualizerSettingsFromJson(json);
 
 @override@JsonKey() final  bool enabled;
